@@ -2,6 +2,6 @@
 
 Web Pasapalabra Game
 
-![](images/pasapalabra.jpg)
+![](https://github.com/alicia-alcaide/skylab-bootcamp-201904/blob/feature/precourse/staff/alicia-alcaide/precourse/pasapalabra-2/images/pasapalabra.JPG?raw=true)
 
-![](images/pasapalabra2.jpg)
+![](https://github.com/alicia-alcaide/skylab-bootcamp-201904/blob/feature/precourse/staff/alicia-alcaide/precourse/pasapalabra-2/images/pasapalabra2.JPG?raw=true)
