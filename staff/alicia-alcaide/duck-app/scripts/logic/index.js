@@ -82,16 +82,23 @@ const logic = {
 
 
     searchDucks(query, callback) {
-        // TODO validate inputs
+        validate.arguments([
+            { name: 'query', value: query, type: 'string', notEmpty: true },
+            { name: 'callback', value: callback, type: 'function' }
+        ])
 
         // TODO handle api errors
         duckApi.searchDucks(query, callback)
     },
 
     retrieveDuck(id, callback) {
-        // TODO validate inputs
+        validate.arguments([
+            { name: 'id', value: id, type: 'string', notEmpty: true },
+            { name: 'callback', value: callback, type: 'function' }
+        ])
 
         // TODO handle api errors
         duckApi.retrieveDuck(id, callback)
     }
+
 }

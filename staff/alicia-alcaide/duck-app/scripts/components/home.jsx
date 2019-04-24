@@ -1,29 +1,50 @@
-const i18nHome = {
-    en: {
-        logout: 'Logout'
-    },
-    es: {
-        logout: 'Cerrar sesión'
-    },
-    ca: {
-        logout: 'Tancar sessió'
-    },
-    ga: {
-        logout: 'Pechar sesión'
+const Home = (()=> {
+    const literals = {
+        en: {
+            hello: 'Hello',
+            logout: 'Logout',
+            search: 'Search'
+        },
+        es: {
+            hello: 'Hola',
+            logout: 'Cerrar sesión',
+            search: 'Buscar'
+        },
+        ca: {
+            hello: 'Hola',
+            logout: 'Tanca sessió',
+            search: 'Buscar'
+        },
+        ga: {
+            hello: 'Hola',
+            logout: 'Finalizar sesión',
+            search: 'Atopar'
+        }
     }
-}
 
 
-function Home(props) {
+    return function ({ lang, name, onLogout, onSearch, error }) {
 
-    const { lang } = props
+        const {hello, logout, search} = literals[lang]
 
-    const literals = i18nHome[lang]
+        function handleSubmit(e) {
+            e.preventDefault()
+            const query = e.target.query.value
+            onSearch(query)
+        }
 
-   
-    return <main>
-        <button onClick={() => props.onLogout()}>{literals.logout}</button>
+        return <main>
+            <button onClick={onLogout}>{logout}</button>
+            <h1>{hello}, {name}!</h1>
         
-        <h1>Hello, {props.name}!</h1>
-    </main>
-}
+          
+            <form onSubmit={handleSubmit}>
+                <input type="text" name="query"/>
+                <button>{search}</button>
+            </form>
+           
+            <span>{error}</span>
+
+        </main>
+    }
+})()
