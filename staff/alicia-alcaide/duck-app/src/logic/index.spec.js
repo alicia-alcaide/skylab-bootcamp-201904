@@ -1,3 +1,7 @@
+import logic from '.'
+import { LogicError, RequirementError, ValueError, FormatError } from '../common/errors'
+import userApi from '../data/user-api'
+
 describe('logic', () => {
     describe('users', () => {
         const name = 'Manuel'
@@ -118,7 +122,7 @@ describe('logic', () => {
             let id
 
             beforeEach(() =>
-                userApi.create(name, surname, email, password)
+                userApi.create(email, password, { name, surname })
                     .then(response => id = response.data.id)
             )
 
@@ -156,11 +160,11 @@ describe('logic', () => {
             )
         })
 
-        describe('retrieve', () => {
+        describe('retrieve user', () => {
             let id, token
 
             beforeEach(() =>
-                userApi.create(name, surname, email, password)
+                userApi.create(email, password, { name, surname })
                     .then(response => {
                         id = response.data.id
 
@@ -198,7 +202,52 @@ describe('logic', () => {
                     })
             })
         })
+
+
+
+        describe('toggleFavDuck', () => {
+            let id, token
+
+            beforeEach(() =>
+                userApi.create(email, password, { name, surname })
+                    .then(response => {
+                        id = response.data.id
+                        return userApi.authenticate(email, password)
+                    })
+                    .then(response => {
+                        token = response.data.token
+                        logic.__userId__ = id
+                        logic.__userToken__ = token
+                    })
+            )
+
+            it('should succeed on adding fav firts time', () => {
+                const fav = '5c3853aebd1bde8520e66edc'
+                logic.toggleFavDuck(fav)
+                    .then( response => expect(response).toBe(undefined))
+                    .then(() => userApi.retrieve(id, token))
+                    .then(response => {
+                        const { status, data } = response
+
+                        expect(status).toBe('OK')
+                        expect(data).toBeDefined()
+
+                        expect(data.id).toBe(id)
+                        expect(data.name).toBe(name)
+                        expect(data.surname).toBe(surname)
+                        expect(data.username).toBe(email)
+                        expect(data.password).toBeUndefined()
+
+                        expect(data.favorites).toBeDefined()
+                        expect(data.favorites.find(fav)).toBeTruthy()
+                    })
+            }
+            )
+
+
+        })
     })
+
 
     describe('ducks', () => {
         describe('search ducks', () => {

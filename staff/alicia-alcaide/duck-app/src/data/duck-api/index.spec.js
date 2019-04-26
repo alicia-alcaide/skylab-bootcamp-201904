@@ -1,3 +1,5 @@
+import duckApi from '.'
+
 describe('duck api', () => {
     describe('search ducks', () => {
         it('should succeed on correct query', () =>
