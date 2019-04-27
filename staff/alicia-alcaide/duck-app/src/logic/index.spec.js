@@ -1,6 +1,7 @@
 import logic from '.'
 import { LogicError, RequirementError, ValueError, FormatError } from '../common/errors'
 import userApi from '../data/user-api'
+import duckApi from '../data/duck-api';
 
 describe('logic', () => {
     describe('users', () => {
@@ -16,7 +17,7 @@ describe('logic', () => {
             logic.__userToken__ = null
         })
 
-        describe('register', () => {
+        describe('register user', () => {
             it('should succeed on correct user data', () =>
                 logic.registerUser(name, surname, email, password)
                     .then(response => expect(response).toBeUndefined())
@@ -118,7 +119,7 @@ describe('logic', () => {
             // TODO password fail cases
         })
 
-        describe('login', () => {
+        describe('login user', () => {
             let id
 
             beforeEach(() =>
@@ -203,51 +204,111 @@ describe('logic', () => {
             })
         })
 
+        describe('toggle fav duck', () => {
+            let id, token, duckId
 
+            beforeEach(() => {
+                duckId = `${Math.random()}`
 
-        describe('toggleFavDuck', () => {
-            let id, token
-
-            beforeEach(() =>
-                userApi.create(email, password, { name, surname })
+                return userApi.create(email, password, { name, surname })
                     .then(response => {
                         id = response.data.id
+
                         return userApi.authenticate(email, password)
                     })
                     .then(response => {
                         token = response.data.token
+
                         logic.__userId__ = id
                         logic.__userToken__ = token
                     })
-            )
+            })
 
-            it('should succeed on adding fav firts time', () => {
-                const fav = '5c3853aebd1bde8520e66edc'
-                logic.toggleFavDuck(fav)
-                    .then( response => expect(response).toBe(undefined))
+            it('should succeed adding fav on first time', () =>
+                logic.toggleFavDuck(duckId)
+                    .then(response => expect(response).toBeUndefined())
                     .then(() => userApi.retrieve(id, token))
                     .then(response => {
-                        const { status, data } = response
+                        const { data: { favs } } = response
 
-                        expect(status).toBe('OK')
-                        expect(data).toBeDefined()
-
-                        expect(data.id).toBe(id)
-                        expect(data.name).toBe(name)
-                        expect(data.surname).toBe(surname)
-                        expect(data.username).toBe(email)
-                        expect(data.password).toBeUndefined()
-
-                        expect(data.favorites).toBeDefined()
-                        expect(data.favorites.find(fav)).toBeTruthy()
+                        expect(favs).toBeDefined()
+                        expect(favs instanceof Array).toBeTruthy()
+                        expect(favs.length).toBe(1)
+                        expect(favs[0]).toBe(duckId)
                     })
-            }
             )
 
+            it('should succeed removing fav on second time', () =>
+                logic.toggleFavDuck(duckId)
+                    .then(() => logic.toggleFavDuck(duckId))
+                    .then(() => userApi.retrieve(id, token))
+                    .then(response => {
+                        const { data: { favs } } = response
 
+                        expect(favs).toBeDefined()
+                        expect(favs instanceof Array).toBeTruthy()
+                        expect(favs.length).toBe(0)
+                    })
+            )
+
+            it('should fail on null duck id', () => {
+                duckId = null
+
+                expect(() => logic.toggleFavDuck(duckId)).toThrowError(RequirementError, 'id is not optional')
+            })
+
+            // TODO more cases
+        })
+
+        describe('retrieve fav ducks', () => {
+            let id, token, _favs
+
+            beforeEach(() => {
+                _favs = []
+
+                return duckApi.searchDucks('')
+                    .then(ducks => {
+                        for (let i = 0; i < 10; i++) {
+                            const randomIndex = Math.floor(Math.random() * ducks.length)
+
+                            _favs[i] = ducks.splice(randomIndex, 1)[0].id
+                        }
+
+                        return userApi.create(email, password, { name, surname, favs: _favs })
+                    })
+                    .then(response => {
+                        id = response.data.id
+
+                        return userApi.authenticate(email, password)
+                    })
+                    .then(response => {
+                        token = response.data.token
+
+                        logic.__userId__ = id
+                        logic.__userToken__ = token
+                    })
+            })
+
+            it('should succeed adding fav on first time', () =>
+                logic.retrieveFavDucks()
+                    .then(ducks => {
+                        ducks.forEach(({ id, title, imageUrl, description, price }) => {
+                            const isFav = _favs.some(fav => fav === id)
+
+                            expect(isFav).toBeTruthy()
+                            expect(typeof title).toBe('string')
+                            expect(title.length).toBeGreaterThan(0)
+                            expect(typeof imageUrl).toBe('string')
+                            expect(imageUrl.length).toBeGreaterThan(0)
+                            expect(typeof description).toBe('string')
+                            expect(description.length).toBeGreaterThan(0)
+                            expect(typeof price).toBe('string')
+                            expect(price.length).toBeGreaterThan(0)
+                        })
+                    })
+            )
         })
     })
-
 
     describe('ducks', () => {
         describe('search ducks', () => {
