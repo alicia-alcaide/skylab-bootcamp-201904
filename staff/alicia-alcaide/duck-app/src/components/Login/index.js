@@ -13,7 +13,7 @@ function Login({ lang, onLogin, error }) {
         onLogin(username, password)
     }
 
-    return <>
+    return <section className="login">
         <h2>{title}</h2>
         <form onSubmit={handleSubmit}>
             <input type="text" name="username" placeholder={email} />
@@ -21,7 +21,7 @@ function Login({ lang, onLogin, error }) {
             <button>{title}</button>
             <span>{error}</span>
         </form>
-    </>
+    </section>
 }
 
 export default Login

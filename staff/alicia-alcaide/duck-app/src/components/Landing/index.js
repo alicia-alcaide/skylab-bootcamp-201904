@@ -1,6 +1,5 @@
 import React from 'react'
 import literals from './literals'
-import './index.sass'
 
 function Landing({ lang, onRegister, onLogin }) {
     const { register, or, login } = literals[lang]

@@ -42,7 +42,7 @@ class Home extends Component {
 
         const { hello, logout } = literals[lang]
 
-        return <main>
+        return <main className="home">
             <h1>{hello}, {name}!</h1>
             <button onClick={onLogout}>{logout}</button>
             <Search lang={lang} onSearch={handleSearch} />
