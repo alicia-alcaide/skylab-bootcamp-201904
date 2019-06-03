@@ -157,7 +157,6 @@ const logic = {
     },
 
     createMapCollection(mapId, collections) {
-        debugger;
         validate.arguments([
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
             { name: 'collections', value: collections, type: 'object', notEmpty: true }

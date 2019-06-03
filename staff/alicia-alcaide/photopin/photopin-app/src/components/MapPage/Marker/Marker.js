@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import InfoWindow from "./InfoWindow";
+import InfoWindow from "../InfoWindow/InfoWindow";
 
 const Marker = props => {
   const markerStyle = {

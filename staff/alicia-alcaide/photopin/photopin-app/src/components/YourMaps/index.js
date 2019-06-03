@@ -22,16 +22,14 @@ class YourMaps extends Component {
     }
 
 
-
     render() {
         const {
             state: { maps },
             props: { lang }
-            
         } = this
 
 
-        const { title } = literals[this.props.lang]
+        const { title } = literals[lang]
 
         return <main className="home">
             <h3>{title}</h3>

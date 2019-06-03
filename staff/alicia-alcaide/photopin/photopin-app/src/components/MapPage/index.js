@@ -1,14 +1,12 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import literals from "./literals";
-import logic from "../../logic";
+import React, { Component } from "react"
+import { withRouter } from "react-router-dom"
+import logic from "../../logic"
 import MapSection from "./MapSection"
+import CollectionSection from "./CollectionSection"
 import './index.sass'
 
 class MapPage extends Component {
-  state = { pmap: null, mapId: this.props.match.params.id, 
-            error: null, addingCollection: false
-          };
+  state = { pmap: null, mapId: this.props.match.params.id };
 
   componentDidMount() {
     logic.isUserLoggedIn &&
@@ -18,13 +16,23 @@ class MapPage extends Component {
         .catch(error => this.setState({ error: error.message }));
   }
 
+  handleNewCollection = (valueNewCollection) => {
+    (async() => {
+      try {
+        const newCollections = [...this.state.pmap.collections, {title: valueNewCollection, pins:[]}]
+
+        await logic.createMapCollection(this.state.pmap._id, newCollections)    
+        this.setState ({ pmap : {collections: newCollections}})
+      } catch (error) {
+        this.setState({error})
+      }
+    })()
+  }
 
 /*
 componentDidMount() {
         const { pmap } = this.props
         let places = []
-
-        debugger
 
         pmap && pmap.collections && pmap.collctions.map(collection => {
             collection.pins && collection.pins.map(pin => {
@@ -35,84 +43,22 @@ componentDidMount() {
     }
 */
 
-
-  handleNewCollection = () => {
-    this.setState({addingCollection : true})
-  }
-
-  
-  handleSubmit = (e) =>{
-    e.preventDefault()
-    
-    const {
-      newCollection: { value: newCollection }
-    } = e.target
-    
-    (async() => {
-      try {
-
-        const newCollections = [...this.state.pmap.collections, {title: newCollection, pins:[]}]
-
-        await logic.createMapCollection(this.state.pmap._id, newCollections)
-
-        this.setState ({ pmap : {collections: newCollections}})
-        this.setState({addingCollection : false})
-      } catch (error) {
-        this.setState({error})
-      }
-    })()
-    
-  }
-
   render() {
     const {
-      state: { pmap, mapId, error, addingCollection, places },
+      state: { pmap, mapId },
       props: { lang },
-      handleNewCollection,
-      handleSubmit
+      handleNewCollection
     } = this;
-
-    const { title, addCollection, add, newCollection } = literals[lang];
 
     return (< main>
       {pmap && <h2>{pmap.title}</h2>}
       <section className="mapPage">
-        <div className="mapPage__Container">
-          <button className="mapPage__Container--addCollection" onClick={() => handleNewCollection()}>{addCollection}</button>
-           {addingCollection &&
-           <section>
-            <form onSubmit={handleSubmit}>
-              <input type="text" name="newCollection" placeholder={newCollection}/>
-              <button type="submit">{add}</button>
-              {error && <span>{error}</span>}
-            </form>
+        <section className="mapPage__Collections">
+          <CollectionSection pmap={pmap} lang={lang} onNewCollection={handleNewCollection} />
+        </section>
+          <section className="mapPage__Map">
+            <MapSection pmap={pmap}/>
           </section>
-          }
-          <section className="mapPage__Collections">
-            {pmap && pmap.collections &&
-              <ul>
-                { pmap.collections.map(collection =>{
-                      return (
-                      <li key={collection.title}>
-                          <h4>{collection.title}</h4>
-                          {collection.pins &&
-                          <ul>
-                            {collection.pins.map(pin => {
-                              return (<li key={pin._id}>
-                                  <h4>{pin.title}</h4>
-                                </li>
-                              )}
-                            )}
-                          </ul>
-                        }
-                      </li>)
-                  })
-                }
-              </ul>            
-            }
-          </section> 
-          <MapSection pmap={pmap}/>
-        </div>
       </section>
       </main>
     )

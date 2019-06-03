@@ -228,8 +228,6 @@ const logic = {
 
         return (async () => {
 
-            debugger
-
             const map = await PMap.findById(mapId)
 
             if(!map) throw new LogicError(`no maps for user with id ${mapId}`)

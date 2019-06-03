@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import GoogleMapReact from "google-map-react";
 import SearchBox from "./SearchBox";
-import Marker from "./Marker";
+import Marker from "../Marker/Marker";
 
 class MapContainer extends React.Component {
   state = {
@@ -35,10 +35,9 @@ class MapContainer extends React.Component {
     this.props.onMarkerClick && this.props.onMarkerClick(key) 
   };
 
-  // onClickCallback = ({x, y, lat, lng, event}) => {
   onClickCallback = (e) => {
     //console.log(x, y, lat, lng, event)
-    debugger
+
     this.props.onMapClick && this.props.onMapClick(e) 
   }
 
@@ -66,7 +65,7 @@ class MapContainer extends React.Component {
           bootstrapURLKeys={{
             key: process.env.REACT_APP_GOOGLE_MAPS_ID,
             libraries: ["places", "geometry"]
-          }} // TODO: extract the key to a ENV prop
+          }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
           yesIWantToUseGoogleMapApiInternals

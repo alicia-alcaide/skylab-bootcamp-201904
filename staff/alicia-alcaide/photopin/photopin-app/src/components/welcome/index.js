@@ -9,7 +9,7 @@ function WelcomePage({ lang, onLogin }) {
             e.preventDefault()
 
             onLogin()
-        }}>{login}</a>.
+        }}>{login}</a>
     </>
 }
 

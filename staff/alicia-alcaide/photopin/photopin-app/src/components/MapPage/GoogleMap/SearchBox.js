@@ -36,7 +36,6 @@ class SearchBox extends Component {
       map.setZoom(17);
     }
 
-    debugger
     addplace(selected);
     this.searchInput.blur();
   };
