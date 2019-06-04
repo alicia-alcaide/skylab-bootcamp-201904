@@ -1,8 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import GoogleMapReact from "google-map-react";
-import SearchBox from "./SearchBox";
-import Marker from "../Marker/Marker";
+import React from "react"
+import PropTypes from "prop-types"
+import GoogleMapReact from "google-map-react"
+import SearchBox from "./SearchBox"
+import Marker from "../Marker"
+import NewMarker from "../NewMarker"
 
 class MapContainer extends React.Component {
   state = {
@@ -13,9 +14,9 @@ class MapContainer extends React.Component {
   };
 
 
-  componentWillReceiveProps(props){
-    const { places } = props
-    this.setState({places})
+  componentWillReceiveProps(props) {
+    const { places, newPlace } = props
+    this.setState({ places })
   }
 
   apiHasLoaded = (map, maps) => {
@@ -24,7 +25,7 @@ class MapContainer extends React.Component {
       mapInstance: map,
       mapApi: maps
     });
-    map.setOptions({draggableCursor:'crosshair'});
+    map.setOptions({ draggableCursor: 'crosshair' });
   };
 
   addPlace = place => {
@@ -32,13 +33,13 @@ class MapContainer extends React.Component {
   };
 
   onChildClickCallback = key => {
-    this.props.onMarkerClick && this.props.onMarkerClick(key) 
+    this.props.onMarkerClick && this.props.onMarkerClick(key)
   };
 
   onClickCallback = (e) => {
     //console.log(x, y, lat, lng, event)
 
-    this.props.onMapClick && this.props.onMapClick(e) 
+    this.props.onMapClick && this.props.onMapClick(e)
   }
 
   static defaultProps = {
@@ -48,7 +49,7 @@ class MapContainer extends React.Component {
     },
     zoom: 10
   };
-  
+
   render() {
     const { places, mapApiLoaded, mapInstance, mapApi } = this.state;
     return (
@@ -73,7 +74,7 @@ class MapContainer extends React.Component {
           onChildClick={this.onChildClickCallback}
           onClick={this.onClickCallback}
         >
-          { places &&
+          {places &&
             places.length > 0 &&
             places.map(place => (
               <Marker
@@ -84,6 +85,16 @@ class MapContainer extends React.Component {
                 lng={place.geometry.location.lng}
               />
             ))}
+          {this.props.newPlace &&
+            <NewMarker
+              lang={this.props.lang}
+              place={this.props.newPlace}
+              lat={this.props.newPlace.lat}
+              lng={this.props.newPlace.lng}
+              onNewPin={this.props.onNewPin}
+              mapCollections={this.props.mapCollections}
+            />
+          }
         </GoogleMapReact>
       </div>
     );
@@ -93,7 +104,10 @@ class MapContainer extends React.Component {
 MapContainer.propTypes = {
   center: PropTypes.object,
   zoom: PropTypes.number,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  onNewPin: PropTypes.func,
+  newPlace: PropTypes.object,
+  mapCollections: PropTypes.array
 };
 
 export default MapContainer;

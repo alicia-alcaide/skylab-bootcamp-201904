@@ -6,27 +6,30 @@ import MapContainer from "../GoogleMap/MapContainer";
 const DEFAULT_MAP_ZOOM = 6
 
 class MapSection extends Component {
-    
-    state = {places : [], mapCenter: null, zoom: DEFAULT_MAP_ZOOM }
-  
+
+    state = { places: [], mapCenter: null, zoom: DEFAULT_MAP_ZOOM, newPlace: null, mapCollections: null }
+
+
     componentWillReceiveProps(props) {
-        const {pmap} = props
+        const { pmap } = props
         let places = []
         let mapCenter = null
+        let mapCollections = []
         pmap && pmap.collections && pmap.collections.map(collection => {
+            mapCollections.push(collection.title)
             collection.pins && collection.pins.map(pin => {
                 places.push(
                     {
-                    id: pin._id,
-                    title: pin.title,
-                    collection: collection.title,
-                    geometry: {
-                        location: {
-                        lat : pin.coordinates.latitude, 
-                        lng: pin.coordinates.longitude
-                        } 
-                    },
-                    showInfo: false      
+                        id: pin._id,
+                        title: pin.title,
+                        collection: collection.title,
+                        geometry: {
+                            location: {
+                                lat: pin.coordinates.latitude,
+                                lng: pin.coordinates.longitude
+                            }
+                        },
+                        showInfo: false
                     }
                 )
                 if (!mapCenter) {
@@ -38,17 +41,17 @@ class MapSection extends Component {
                 }
             })
         })
-        this.setState({places, mapCenter})
+        this.setState({ places, mapCenter, mapCollections })
     }
 
     handleMarkerClick = (id) => {
+        this.setState({ newPlace: null })
         this.setState(state => {
-            debugger
             state.places.map(place => {
                 place.id === id ? place.showInfo = !place.showInfo : place.showInfo = false
             })
             return { places: state.places }
-          })
+        })
     }
 
     handleMapClick = (e) => {
@@ -57,21 +60,35 @@ class MapSection extends Component {
                 place.showInfo = false
             })
             return { places: state.places }
-          })
+        })
+
+        this.setState({
+            newPlace: {
+                lat: e.lat,
+                lng: e.lng
+            }
+        })
+    }
+
+    handleNewPin = (pin) => {
+        this.setState({ newPlace: null })
+        this.props.onNewPin(pin)
     }
 
     render() {
         const {
-        state: { places, mapCenter, zoom },
-        handleMarkerClick,
-        handleMapClick
+            state: { places, mapCenter, zoom, newPlace, mapCollections },
+            props: { lang },
+            handleMarkerClick,
+            handleMapClick,
+            handleNewPin
         } = this;
 
         /* TODO: Si se pasa mapCenter por props no pinta el mapa, si se deja 
                 por defecto sique funciona 
                center={mapCenter}  */
         return (
-            <MapContainer places={places}  zoom={zoom} onMarkerClick={handleMarkerClick} onMapClick={handleMapClick}/> 
+            <MapContainer lang={lang} places={places} zoom={zoom} onMarkerClick={handleMarkerClick} onMapClick={handleMapClick} onNewPin={handleNewPin} newPlace={newPlace} mapCollections={mapCollections} />
         )
     }
 }

@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import InfoWindow from "../InfoWindow/InfoWindow";
+import NewPinWindow from "../NewPinWindow";
+import './index.sass';
 
-const Marker = props => {
+const NewMarker = props => {
   const markerStyle = {
     border: "1px solid white",
     borderRadius: "50%",
     height: 10,
     width: 10,
-    backgroundColor: props.place.showInfo ? "red" : "blue",
+    backgroundColor: "yellow",
     cursor: "pointer",
     zIndex: 10
   };
@@ -20,18 +21,18 @@ const Marker = props => {
         alt={props.place.text}
         {...(props.onClick ? { onClick: props.onClick } : {})}
       />
-      {props.place.showInfo && <InfoWindow place={props.place} />}
+      <NewPinWindow place={props.place} newPlace={props.newPlace} onNewPin={props.onNewPin} lang={props.lang} mapCollections={props.mapCollections} />
     </>
   );
 };
 
-Marker.defaultProps = {
+NewMarker.defaultProps = {
   onClick: null
 };
 
-Marker.propTypes = {
+NewMarker.propTypes = {
   onClick: PropTypes.func,
   place: PropTypes.object.isRequired
 };
 
-export default Marker;
+export default NewMarker;

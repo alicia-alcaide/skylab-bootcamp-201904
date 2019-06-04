@@ -8,7 +8,7 @@ import logic from './logic'
 import normalize from './utils/normalize'
 
 //TODO: styles
-//import './components/index.css';
+//import './index.sass'
 
 
 Object.defineProperties(logic, {
