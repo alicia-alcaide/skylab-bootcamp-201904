@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import NewPinWindow from "../NewPinWindow";
-import './index.sass';
+//import './index.sass';
+
 
 const NewMarker = props => {
   const markerStyle = {
@@ -31,8 +32,11 @@ NewMarker.defaultProps = {
 };
 
 NewMarker.propTypes = {
-  onClick: PropTypes.func,
-  place: PropTypes.object.isRequired
+  place: PropTypes.object.isRequired,
+  newPlace: PropTypes.object,
+  onNewPin: PropTypes.func,
+  lang: PropTypes.string,
+  mapCollections: PropTypes.array
 };
 
 export default NewMarker;

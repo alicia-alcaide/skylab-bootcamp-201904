@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"
 import { withRouter } from "react-router-dom";
 import MapContainer from "../GoogleMap/MapContainer";
 //import './index.sass'
@@ -92,6 +93,14 @@ class MapSection extends Component {
         )
     }
 }
+
+
+MapSection.propTypes = {
+    lang: PropTypes.string,
+    handleNewPin: PropTypes.func,
+    pmap: PropTypes.object
+};
+
 
 export default withRouter(MapSection);
 

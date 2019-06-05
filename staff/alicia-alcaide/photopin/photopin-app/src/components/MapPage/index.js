@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
+import PropTypes from "prop-types"
 import logic from "../../logic"
 import MapSection from "./MapSection"
 import CollectionSection from "./CollectionSection"
@@ -16,13 +17,13 @@ class MapPage extends Component {
         .catch(error => this.setState({ error: error.message }));
   }
 
-
-  handleNewCollection = (valueNewCollection) => {
+  handleNewCollection = (titleNewCollection) => {
     (async () => {
       try {
-        const newCollections = [...this.state.pmap.collections, { title: valueNewCollection, pins: [] }]
+        debugger
 
-        await logic.createMapCollection(this.state.pmap._id, newCollections)
+        const collectionId = await logic.createCollection(this.state.pmap._id, titleNewCollection)
+        const newCollections = [...this.state.pmap.collections, { id: collectionId, title: titleNewCollection, pins: [] }]
         this.setState({ pmap: { collections: newCollections } })
       } catch (error) {
         this.setState({ error })
@@ -32,13 +33,47 @@ class MapPage extends Component {
 
 
   handleNewPin = (newPin) => {
-    //TODO: crear el newPlace a partir de la información que llega
-    // en base de datos:
-    //   - crear nuevo pin
-    //   - añadir nuevo pin a la colección del mapa
-    // añadir nuevo pin a la colección del pmap y setear su estado
+    if (newPin !== null) {
 
-    window.alert('ahora guardar el pin')
+      debugger
+      (async () => {
+        try {
+
+          const pin = {
+            title: newPin.title,
+            description: newPin.description,
+            urlImage: newPin.urlImage,
+            bestTimeOfYear: newPin.bestTimeOfYear,
+            bestTimeOfDay: newPin.bestTimeOfDay,
+            photographyTips: newPin.photographyTips,
+            travelInformation: newPin.travelInformation,
+            coordinates: newPin.coordinates
+          }
+
+          window.alert('Aqui hacer modificación base de datos')
+
+          //TODO: crear el newPlace a partir de la información que llega
+          // en base de datos:
+          //   - crear nuevo pin
+          //   - añadir nuevo pin a la colección del mapa
+          // añadir nuevo pin a la colección del pmap y setear su estado
+
+
+          //await logic.createPin(this.state.pmap._id, pin.collectionSel, pin)
+
+          // debugger
+          // const colIndex = pmap.collections.indexOf(newPin.collectionSel)
+          // const colWithNewPin = pmap.collections[colIndex].slice().splice(0, 0, newPin.collectionSel)
+          // const newCollections = pmap.collections.slice().splice(colIndex, 0, colWithNewPin)
+
+          // this.setState({ pmap: { collections: newCollections } })
+
+        } catch (error) {
+          this.setState({ error })
+        }
+      })()
+
+    }
   }
 
 
@@ -64,5 +99,9 @@ class MapPage extends Component {
     )
   }
 }
+
+MapPage.propTypes = {
+  lang: PropTypes.string
+};
 
 export default withRouter(MapPage);

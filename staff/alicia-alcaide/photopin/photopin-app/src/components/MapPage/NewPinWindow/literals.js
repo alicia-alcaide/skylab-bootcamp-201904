@@ -8,7 +8,8 @@ export default {
         photoTips: 'Photography tips: ',
         travelInfo: 'Travel information: ',
         collection: 'Collection: ',
-        add: 'Add'
+        add: 'Add',
+        cancel: 'Cancel: '
     },
     es: {
         title: 'Título: ',
@@ -19,6 +20,7 @@ export default {
         photoTips: 'Apuntes fotográficos: ',
         travelInfo: 'Información de viaje: ',
         collection: 'Colección: ',
-        add: 'Añadir'
+        add: 'Añadir',
+        cancel: 'Cancelar: '
     }
 }

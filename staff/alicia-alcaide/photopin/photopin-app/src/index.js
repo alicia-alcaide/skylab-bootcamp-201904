@@ -4,10 +4,8 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { HashRouter as Router } from 'react-router-dom'
 import logic from './logic'
-//const normalize = require('../utils/normalize')
-import normalize from './utils/normalize'
+const normalize = require('photopin-normalize')
 
-//TODO: styles
 //import './index.sass'
 
 
@@ -15,12 +13,10 @@ Object.defineProperties(logic, {
 
     __userToken__: {
         set(token) {
-            //sessionStorage.setItem('token', token)
             sessionStorage.userToken = token
         },
 
         get() {
-            //return normalize.undefinedOrNull(sessionStorage.getItem('token'))
             return normalize.undefinedOrNull(sessionStorage.userToken)
         }
     }

@@ -92,6 +92,7 @@ class MapContainer extends React.Component {
               lat={this.props.newPlace.lat}
               lng={this.props.newPlace.lng}
               onNewPin={this.props.onNewPin}
+              newPlace={this.props.newPlace}
               mapCollections={this.props.mapCollections}
             />
           }
@@ -105,6 +106,7 @@ MapContainer.propTypes = {
   center: PropTypes.object,
   zoom: PropTypes.number,
   onClick: PropTypes.func,
+  lang: PropTypes.string,
   onNewPin: PropTypes.func,
   newPlace: PropTypes.object,
   mapCollections: PropTypes.array
