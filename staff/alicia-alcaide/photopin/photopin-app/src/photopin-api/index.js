@@ -138,15 +138,15 @@ const photopinApi = {
         })
     },
 
-    createPin(token, mapId, collectionId, newPin) {
+    createPin(token, mapId, collectionTitle, newPin) {
         validate.arguments([
             { name: 'token', value: token, type: 'string', notEmpty: true },
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true },
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true },
             { name: 'newPin', value: newPin, type: 'object', notEmpty: true }
         ])
 
-        return call(`${this.__url__}/map/${mapId}/collection/${collectionId}/pin`, {
+        return call(`${this.__url__}/map/${mapId}/collection/${collectionTitle}/pin`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -175,21 +175,21 @@ const photopinApi = {
     },
 
 
-    updateCollection(token, mapId, collectionId, title) {
+    updateCollection(token, mapId, collectionTitle, newTitle) {
         validate.arguments([
             { name: 'token', value: token, type: 'string', notEmpty: true },
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true },
-            { name: 'title', value: title, type: 'string', notEmpty: true }
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true },
+            { name: 'neTtitle', value: newTitle, type: 'string', notEmpty: true }
         ])
 
-        return call(`${this.__url__}/map/${mapId}/collection/${collectionId}`, {
+        return call(`${this.__url__}/map/${mapId}/collection/${collectionTitle}`, {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            data: { title }
+            data: { newTitle }
         })
     },
 
@@ -238,14 +238,14 @@ const photopinApi = {
         })
     },
 
-    removeCollection(token, mapId, collectionId) {
+    removeCollection(token, mapId, collectionTitle) {
         validate.arguments([
             { name: 'token', value: token, type: 'string', notEmpty: true },
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true }
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true }
         ])
 
-        return call(`${this.__url__}/map/${mapId}/collection/${collectionId}`, {
+        return call(`${this.__url__}/map/${mapId}/collection/${collectionTitle}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,

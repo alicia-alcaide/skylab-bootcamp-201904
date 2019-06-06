@@ -265,7 +265,7 @@ const logic = {
             if (!map.author.equals(userId)) throw new LogicError(`map ${mapId} is not from user ${userId}`)
 
             try {
-                const mapUpdated = map.collections.push(new Collection({ title: collectionTitle }))
+                const mapUpdated = map.collections.push({ title: collectionTitle, pins: [] })
                 await map.save()
                 return mapUpdated
             } catch (error) {
@@ -274,13 +274,13 @@ const logic = {
         })()
     },
 
-    updateCollection(userId, mapId, collectionId, title) {
+    updateCollection(userId, mapId, collectionTitle, newTitle) {
 
         validate.arguments([
             { name: 'userId', value: userId, type: 'string', notEmpty: true },
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true },
-            { name: 'title', value: title, type: 'string', notEmpty: true }
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true },
+            { name: 'newTitle', value: newTitle, type: 'string', notEmpty: true }
         ])
 
         return (async () => {
@@ -292,22 +292,24 @@ const logic = {
             if (!map.author.equals(userId)) throw new LogicError(`map ${mapId} is not from user ${userId}`)
 
             try {
-                const colIndex = map.collections.findIndex(col => col.id === collectionId)
-                PMap.collections[colIndex].title = title
+                const colIndex = map.collections.findIndex(col => col.id === collectionTitle)
+                const colIndexNewTitle = map.collections.findIndex(col => col.id === newTitle)
+                if (colIndexNewTitle > 0) throw new LogicError(`error updating, collection ${newTitle} already exist on map ${mapId}`)
+                PMap.collections[colIndex].title = newTitle
                 await map.save()
             } catch (error) {
-                throw new LogicError(`error updating collection ${collectionId} on map ${mapId}`)
+                throw new LogicError(`error updating collection ${collectionTitle} on map ${mapId}`)
             }
         })()
     },
 
 
-    createPin(userId, mapId, collectionId, newPin) {
+    createPin(userId, mapId, collectionTitle, newPin) {
 
         validate.arguments([
             { name: 'userId', value: userId, type: 'string', notEmpty: true },
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true },
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true },
             { name: 'newPin', value: newPin, type: 'object', notEmpty: true }
         ])
 
@@ -322,7 +324,6 @@ const logic = {
             try {
                 const pinCreated = Pin.create({
                     mapId,
-                    collectionId,
                     author: userId,
                     title: newPin.title,
                     description: newPin.description,
@@ -334,7 +335,7 @@ const logic = {
                     coordinates: newPin.coordinates
                 })
 
-                const colIndex = map.collections.findIndex(col => col.id === collectionId)
+                const colIndex = map.collections.findIndex(col => col.id === collectionTitle)
                 PMap.collections[colIndex].pins.push(pinCreated.id)
                 await map.save()
                 return pinCreated.id
@@ -388,11 +389,11 @@ const logic = {
         })()
     },
 
-    removeCollection(userId, mapId, collectionId) {
+    removeCollection(userId, mapId, collectionTitle) {
         validate.arguments([
             { name: 'userId', value: userId, type: 'string', notEmpty: true },
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true }
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true }
         ])
 
         return (async () => {
@@ -401,12 +402,13 @@ const logic = {
 
             if (!map.author.equals(userId)) throw new LogicError(`map ${mapId} is not from user ${userId}`)
 
-
-            const colIndex = map.collections.findIndex(col => col.id === collectionId)
+            const colIndex = map.collections.findIndex(col => col.id === collectionTitle)
             PMap.collections.splice(colIndex, 1)
             await map.save()
 
-            await Pin.deleteMany({ mapId, collectionId })
+            map.collections[colIndex].pins.forEach(async pin => {
+                await Pin.findByIdAndDelete(pin)
+            })
 
             return map
         })()

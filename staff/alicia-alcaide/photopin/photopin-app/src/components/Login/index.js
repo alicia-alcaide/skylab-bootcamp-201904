@@ -19,7 +19,7 @@ function Login({ lang, onLogin, error }) {
         <form onSubmit={handleSubmit} className="field">
             <div className="field">
                 <p className="control has-icons-left has-icons-right">
-                    <input className="input" type="email" name="username" placeholder={email} />
+                    <input className="input" type="email" name="username" placeholder={email} autoFocus value="ali@mail.com" />
                     <span className="icon is-small is-left">
                         <i className="fas fa-envelope"></i>
                     </span>
@@ -30,7 +30,7 @@ function Login({ lang, onLogin, error }) {
             </div>
             <div className="field">
                 <p className="control has-icons-left">
-                    <input className="input" type="password" name="password" placeholder={password} />
+                    <input className="input" type="password" name="password" placeholder={password} value="123" />
                     <span className="icon is-small is-left">
                         <i className="fas fa-lock"></i>
                     </span>

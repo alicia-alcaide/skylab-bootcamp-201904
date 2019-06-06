@@ -163,16 +163,16 @@ const logic = {
     },
 
 
-    createPin(mapId, collectionId, newPin) {
+    createPin(mapId, collectionTitle, newPin) {
         validate.arguments([
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true },
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true },
             { name: 'newPin', value: newPin, type: 'object', notEmpty: true }
         ])
 
         return (async () => {
             try {
-                return await photopinApi.createPin(this.__userToken__, mapId, collectionId, newPin)
+                return await photopinApi.createPin(this.__userToken__, mapId, collectionTitle, newPin)
             } catch (error) {
                 throw new LogicError(error)
             }
@@ -195,16 +195,16 @@ const logic = {
     },
 
 
-    updateCollection(mapId, collectionId, title) {
+    updateCollection(mapId, collectionTitle, title) {
         validate.arguments([
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true },
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true },
             { name: 'title', value: title, type: 'string', notEmpty: true }
         ])
 
         return (async () => {
             try {
-                await photopinApi.updateCollection(this.__userToken__, mapId, collectionId, title)
+                await photopinApi.updateCollection(this.__userToken__, mapId, collectionTitle, title)
             } catch (error) {
                 throw new LogicError(error)
             }
@@ -253,15 +253,15 @@ const logic = {
     },
 
 
-    removeCollection(mapId, collectionId) {
+    removeCollection(mapId, collectionTitle) {
         validate.arguments([
             { name: 'mapId', value: mapId, type: 'string', notEmpty: true },
-            { name: 'collectionId', value: collectionId, type: 'string', notEmpty: true }
+            { name: 'collectionTitle', value: collectionTitle, type: 'string', notEmpty: true }
         ])
 
         return (async () => {
             try {
-                await photopinApi.removeCollection(this.__userToken__, mapId, collectionId)
+                await photopinApi.removeCollection(this.__userToken__, mapId, collectionTitle)
             } catch (error) {
                 throw new LogicError(error)
             }

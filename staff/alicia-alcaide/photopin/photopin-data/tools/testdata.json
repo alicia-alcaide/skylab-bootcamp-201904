@@ -8,15 +8,10 @@ pinid5 = ObjectId()
 mapid1 = ObjectId()
 mapid2 = ObjectId()
 mapid3 = ObjectId()
-colid1 = ObjectId()
-colid2 = ObjectId()
-colid3 = ObjectId()
-colid4 = ObjectId()
 db.pins.insertMany([
 { 
     "_id": pinid1,
     mapId: mapid1,
-    collectionId: colid1,
     author: ObjectId("5cf28aea7949356028c9acfb"), 
     title: "Skogafoss",
     description: "My favorite waterfall",
@@ -33,7 +28,6 @@ db.pins.insertMany([
 { 
     "_id": pinid2,
     mapId: mapid1,
-    collectionId: colid2,
     author: ObjectId("5cf28aea7949356028c9acfb"), 
     title: "Jökulsárlón",
     description: "My favorite glacier lagoon",
@@ -50,7 +44,6 @@ db.pins.insertMany([
 { 
     "_id": pinid3,
     mapId: mapid1,
-    collectionId: colid2,
     author: ObjectId("5cf28aea7949356028c9acfb"), 
     title: "Stokness",
     description: "Batman mountain",
@@ -67,7 +60,6 @@ db.pins.insertMany([
 { 
     "_id": pinid4,
     mapId: mapid2,
-    collectionId: colid3,
     author: ObjectId("5cf28aea7949356028c9acfb"), 
     title: "Tre Cime di Lavadero",
     description: "Refugio Locatelli | Dreizinnenhütte",
@@ -84,7 +76,6 @@ db.pins.insertMany([
 { 
     "_id": pinid5,
     mapId: mapid3,
-    collectionId: colid4,
     author: ObjectId("5cf28aea7949356028c9acfb"), 
     title: "Neist Point",
     description: "My favorite lighthouse",
@@ -109,11 +100,11 @@ db.pmaps.insertMany([
     author: ObjectId("5cf28aea7949356028c9acfb"),
     isPublic: false,
     collections: [
-    {"_id": colid1,
+    {
         title: "Waterfalls",
         pins: [pinid1]
     },
-    {"_id": colid2,
+    {
         title: "South",
         pins: [pinid2, pinid3]
     }
@@ -127,7 +118,7 @@ db.pmaps.insertMany([
     author: ObjectId("5cf28aea7949356028c9acfb"),
     isPublic: false,
     collections: [
-        {"_id": colid3,
+        {
             title: "Mountains",
             pins: [pinid4]
         }
@@ -141,7 +132,7 @@ db.pmaps.insertMany([
     author: ObjectId("5cf28aea7949356028c9acfb"),
     isPublic: false,
     collections: [
-        {"_id": colid4,
+        {
             title: "Coast",
             pins: [pinid5]
         }

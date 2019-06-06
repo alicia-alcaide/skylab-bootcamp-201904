@@ -17,7 +17,6 @@ const router = express.Router()
 
 router.use(cors())
 
-
 router.post('/user', jsonBodyParser, registerUser)
 router.post('/user/auth', jsonBodyParser, authenticateUser)
 router.get('/user', auth, retrieveUser)
@@ -31,14 +30,12 @@ router.post('/map', [jsonBodyParser, auth], createMap)
 router.put('/map/:id', [jsonBodyParser, auth], updateMap)
 router.delete('/map/:id', auth, removeMap)
 
-
-router.post('/map/:id/collection/:colId/pin', [jsonBodyParser, auth], createPin)
+router.post('/map/:id/pin', [jsonBodyParser, auth], createPin)
 router.put('/pin/:id', [jsonBodyParser, auth], updatePin)
 router.delete('/pin/:id', auth, removePin)
 
-
 router.post('/map/:id/collection', [jsonBodyParser, auth], createCollection)
-router.put('/map/:id/collection/:colId', [jsonBodyParser, auth], updateCollection)
-router.delete('/map/:id/collection/:colId', auth, removeCollection)
+router.put('/map/:id/collection/:title', [jsonBodyParser, auth], updateCollection)
+router.delete('/map/:id/collection/:title', auth, removeCollection)
 
 module.exports = router
